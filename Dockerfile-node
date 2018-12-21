@@ -1,0 +1,17 @@
+FROM node:10-alpine
+
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+
+ARG PORT=80
+ENV PORT ${PORT}
+
+COPY ./package.json /usr/src/app
+COPY ./dist/. /usr/src/app/dist
+COPY ./bin/. /usr/src/app/bin
+
+RUN npm install express yargs && npm cache clean --force
+RUN chmod +x ./bin/program
+
+CMD ./bin/program
+EXPOSE $PORT
